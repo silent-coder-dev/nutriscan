@@ -1587,6 +1587,7 @@ flowchart LR
 | 16 | **Neon database config** | `application.properties` (`SPRING_DATASOURCE_URL/USERNAME/PASSWORD`) | Production DB = Neon; local pe Docker fallback. Password **sirf** Render env var mein |
 | 17 | **Render region = Ohio** | `render.yaml` | Neon `us-east-2` (Ohio) mein hai; API bhi wahin, to har query fast |
 | 18 | **`DatabaseUrlResolver` ab `SPRING_DATASOURCE_URL` ka respect karta hai** | `DatabaseUrlResolver.java` (+1 test, total **61**) | Dono set hon to Neon wala URL jeete; galti se doosra DB use na ho |
+| 19 | **GitHub pe push** (ek repo, README root pe) | <https://github.com/silent-coder-dev/nutriscan> | Render isi repo se deploy karega; push se pehle secrets check kiye |
 
 > ✅ **Asli test result (Render jaisi settings: 512 MB, `PORT=10000`, `postgresql://` URL, Redis nahi):** app **29 sec** mein start hua, memory **~300 MB / 512 MB**. Health UP, naye DB pe Nutella Open Food Facts se aaya, analysis chala, register + JWT login chala, CORS (trailing slash ke saath) chala, alag forwarded IPs ko alag guest quota mila, aur Redis na hone pe memory fallback chala.
 
@@ -1758,7 +1759,13 @@ nutriscan/                      ← GitHub repo ka root
 └── nutriscan-web/
 ```
 
-> ⚠️ **Important:** `nutriscan-web/` ke andar ek purana **`.git` folder** hai (create-next-app wala). Root pe naya repo banane se pehle use hatana padega, warna Git use "repo ke andar repo" (submodule) maan lega aur Render pe frontend ka code **khaali** dikhega.
+> ✅ **Ye step ho chuka hai.** Poora project ek repo mein push ho gaya: **<https://github.com/silent-coder-dev/nutriscan>**
+> - `nutriscan-web/` ke andar ek purana **`.git` folder** tha (create-next-app wala). Use **backup karke hataya** (`Downloads/NutriScan-backup-2026-10-14/nutriscan-web-dot-git`), warna Git use "repo ke andar repo" (submodule) maan leta aur GitHub/Render pe frontend folder **khaali** dikhta.
+> - README ko `nutriscan-web/` se **repo root** pe move kiya, kyunki GitHub sirf root ka README main page pe dikhata hai. Saare links fix kiye.
+> - Push se pehle check kiya: `.env.local`, `node_modules`, `target`, `.next`, IntelliJ `.idea` (jisme OpenRouter key thi) **push nahi hue**; staged files mein koi secret nahi.
+> - Commit mein sirf tumhara naam (Silent_Coder).
+
+Neeche ke commands reference ke liye hain (kisi naye project mein yahi steps):
 
 ```bash
 cd NutriScan
@@ -1772,6 +1779,16 @@ git push -u origin main
 ```
 
 ⚠️ Push se pehle check karo: `git status` mein **`.env.local` nahi** dikhna chahiye (secrets!).
+
+**Ab aage ke changes kaise bhejein:** `NutriScan` folder se
+
+```bash
+git add -A
+git commit -m "kya badla, short mein"
+git push
+```
+
+Render pe Blueprint connect hone ke baad har `git push` pe **auto-deploy** hoga.
 
 ### Step 0.5: Neon se connection details lo
 
@@ -1868,7 +1885,7 @@ git push -u origin main
 
 | # | Kya nahi kiya / limitation | Matlab | Aage kya kar sakte ho |
 |:-:|:--|:--|:--|
-| 1 | **Maine khud Render pe deploy nahi kiya** | Render account login tumhara hai; maine sab files ready ki aur locally Docker se test kiya | Upar ke steps follow karo |
+| 1 | **Render pe deploy abhi baaki hai** (GitHub push ✅ ho chuka) | Render account login tumhara hai; maine sab files ready ki aur locally Docker se test kiya | Upar ke steps follow karo |
 | 2 | **`render.yaml` Render pe test-run nahi hua** | Render ke documented format pe likha hai, par asli Blueprint run nahi kiya | Error aaye to G5 ka manual tareeka |
 | 3 | **Redis cloud pe nahi** | Guest limit memory mein: app restart/sleep pe reset, aur ek hi instance ke liye | Render Key Value (free) bana ke `SPRING_DATA_REDIS_URL` set karo |
 | 4 | **Free plan sleep** | 15 min koi request nahi aayi to app so jaata hai; agli request pe ~1–2 min wake-up (Spring Boot slow start) | Demo se pehle ek baar URL khol ke "jagao" 😄 |

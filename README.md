@@ -381,7 +381,9 @@ Expected without `OPENROUTER_API_KEY`: the analysis is then built from nutrition
 - [x] Barcode lookup, analysis, personal alerts, veg mark, swaps
 - [x] Eco redesign, NutriBot mascot, recent searches, Clear button
 - [x] Dockerfile + Render Blueprint (deploy-ready, verified locally)
-- [ ] Push to GitHub and deploy on Render
+- [x] Pushed to GitHub as one repo (README at the root, secrets checked)
+- [x] Production database set up for Neon (configured through environment variables only)
+- [ ] Deploy on Render (backend + frontend)
 - [ ] Use Open Food Facts `ingredients_analysis_tags` to double-check the veg mark
 - [ ] Sync recent searches to the account
 - [ ] Commit the Playwright end-to-end suite

@@ -210,6 +210,8 @@ This section records real problems found while building and testing NutriScan, a
 - [x] Eco redesign + NutriBot mascot
 - [x] Recent searches with veg filters
 - [x] Dockerfile + Render Blueprint, verified locally with free-tier limits
+- [x] Production database configured for Neon (environment variables only)
+- [x] Pushed to GitHub: [silent-coder-dev/nutriscan](https://github.com/silent-coder-dev/nutriscan)
 - [ ] Deploy on Render (see [LEARN.md → Part G](LEARN.md#part-g-deployment-render-pe-free-hosting))
 - [ ] Use Open Food Facts' `ingredients_analysis_tags` to double-check the veg mark
 - [ ] Store recent searches in the account so they sync across devices
