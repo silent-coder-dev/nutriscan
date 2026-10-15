@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+@theme {
+  /* Kitchen-garden palette: oat paper, forest ink, leaf green, terracotta */
+  --color-bg: #f4efe3; /* oat paper */
+  --color-surface: #fffcf5; /* card */
+  --color-raised: #ece5d3; /* kraft */
+  --color-sage: #e3ead8; /* soft green panel */
+  --color-line: #ded4bf;
+  --color-line-strong: #c9bc9f;
+  --color-fg: #1f2d24; /* forest ink */
+  --color-muted: #4f5e53;
+  --color-dim: #6b786e;
+  --color-leaf: #2e6b46; /* primary */
+  --color-leaf-hot: #24583a;
+  --color-sprout: #8fbf4a; /* decorative accent only */
+  --color-clay: #b9502d; /* terracotta: high / errors */
+  --color-sun: #9a6514; /* ochre: moderate */
+  --color-river: #2b7a66; /* teal: low / good */
+
+  --animate-sweep: sweep 1.8s ease-in-out infinite;
+
+  @keyframes sweep {
+    0%, 100% { transform: translateY(-110%); }
+    50% { transform: translateY(110%); }
+  }
+}
+
+@theme inline {
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-figtree), system-ui, sans-serif;
+  --font-mono: var(--font-spacemono), ui-monospace, monospace;
+}
+
+html {
+  background: var(--color-bg);
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-bg);
+  /* Faint paper grain */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.12 0 0 0 0 0.18 0 0 0 0 0.14 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-leaf);
+  color: var(--color-bg);
+}
+
+/* In the base layer so a component's own outline-none / ring utilities win */
+@layer base {
+  :focus-visible {
+    outline: 3px solid color-mix(in oklab, var(--color-leaf) 45%, transparent);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply bg-surface border border-line rounded-[20px] shadow-[0_1px_0_rgb(31_45_36/0.04),0_12px_32px_-22px_rgb(31_45_36/0.35)];
+  }
+  .panel-raised {
+    @apply bg-bg border border-line rounded-2xl;
+  }
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.14em] text-muted;
+  }
+  .display {
+    @apply font-display font-semibold tracking-[-0.02em];
+  }
+  .field-label {
+    @apply block text-[13px] font-semibold text-fg mb-2;
+  }
+  .field {
+    @apply w-full h-12 px-4 rounded-xl bg-surface border border-line-strong text-[15px] text-fg placeholder:text-dim outline-none transition-colors focus:border-leaf focus:ring-4 focus:ring-leaf/15 disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+  .field-error {
+    @apply border-clay focus:border-clay focus:ring-clay/15;
+  }
+  .field-ok {
+    @apply border-river focus:border-river focus:ring-river/15;
+  }
+
+  .btn-primary,
+  .btn-ghost,
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 h-12 px-6 rounded-full text-[15px] font-bold cursor-pointer select-none transition-[background-color,border-color,transform] duration-150 disabled:opacity-45 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply bg-leaf text-bg enabled:hover:bg-leaf-hot enabled:active:scale-[0.97] [&:not(button)]:hover:bg-leaf-hot;
+  }
+  .btn-ghost {
+    @apply bg-surface text-fg border border-line-strong hover:border-fg/50 hover:bg-raised/40 active:scale-[0.97];
+  }
+  .btn-danger {
+    @apply bg-clay/10 text-clay border border-clay/40 hover:bg-clay/15;
+  }
+  .btn-sm {
+    @apply h-9 px-4 text-[13px];
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-3.5 h-9 rounded-full border border-line-strong bg-surface text-[13px] font-medium text-muted cursor-pointer transition-colors hover:text-fg hover:border-fg/50;
+  }
+  .chip-on {
+    @apply bg-leaf border-leaf text-bg font-semibold hover:text-bg hover:border-leaf;
+  }
+  .chip-warn {
+    @apply bg-clay/10 border-clay text-clay font-semibold hover:text-clay hover:border-clay;
+  }
+
+  .tag {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-current/35 font-mono text-[10px] font-bold uppercase tracking-wider;
+  }
+
+  .notice-error,
+  .notice-ok,
+  .notice-warn {
+    @apply flex items-start gap-3 p-4 rounded-2xl border text-sm text-fg;
+  }
+  .notice-error {
+    @apply bg-clay/8 border-clay/35;
+  }
+  .notice-ok {
+    @apply bg-river/8 border-river/35;
+  }
+  .notice-warn {
+    @apply bg-sun/8 border-sun/35;
+  }
+
+  .link {
+    @apply font-semibold text-fg underline decoration-leaf decoration-2 underline-offset-4 hover:text-leaf;
+  }
+}

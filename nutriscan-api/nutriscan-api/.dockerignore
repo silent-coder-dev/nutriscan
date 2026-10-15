@@ -1,0 +1,13 @@
+# Keep the Docker build context small: only pom.xml and src/ are needed
+target/
+.idea/
+*.iml
+.vscode/
+.mvn/
+mvnw
+mvnw.cmd
+HELP.md
+docker-compose.yml
+Dockerfile
+.dockerignore
+*.log

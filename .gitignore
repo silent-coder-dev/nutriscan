@@ -1,0 +1,24 @@
+# ---- Shared ----
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+*.iml
+
+# ---- Secrets / local env (never commit) ----
+.env
+.env.*
+!.env.example
+
+# ---- Backend (Java / Maven) ----
+target/
+nutriscan-api/nutriscan-api/HELP.md
+nutriscan-api/nutriscan-api/.mvn/wrapper/maven-wrapper.jar
+
+# ---- Frontend (Next.js) ----
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
